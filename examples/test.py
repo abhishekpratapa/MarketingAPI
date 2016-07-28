@@ -16,4 +16,5 @@ print(html_code)
 
 driver.close()
 display.stop()
+
 exit()
