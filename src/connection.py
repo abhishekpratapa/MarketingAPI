@@ -6,7 +6,7 @@ from pymongo import MongoClient
 # Description: This exception handles a type error if the variable if the wrong type this
 #              this exception is called
 
-class type_exception(Exception):
+class TypeException(Exception):
     def __init__(self, value):
         self.value = value
 
@@ -19,19 +19,20 @@ class type_exception(Exception):
 # Description: This exception handles a database exception, it is raised whenever a database
 #              doesn't exist this exception is called
 
-class database_exception(Exception):
+class DatabaseException(Exception):
     def __init__(self, value):
         self.value = value
 
     def __str__(self):
         return repr(self.value)
 
+
 # Query Error
 #
 # Description: this exception handles a query exception, it is raised whenever there is
 #              and error when quering the database
 
-class query_error(Exception):
+class QueryError(Exception):
     def __init__(self, value):
         self.value = value
 
@@ -46,12 +47,11 @@ class query_error(Exception):
 #
 # Methods:
 #
-#       insert
-#       get_data
+#       insert: insert data into the selected database and collection
+#       get_data: get data from the selected database and collection
 #
 
 class Connection:
-
 
     # Method: __init_
     #
@@ -71,7 +71,6 @@ class Connection:
         for database in database_names:
             self.db[database] = self.client[database]
 
-
     # Method: insert
     #
     # Description: insert data into the Mongo database
@@ -88,11 +87,11 @@ class Connection:
 
         # Check if the type of the data is dict()
         if not (type(dict()) == type(data)):
-            raise type_exception("Please make sure the data is in 'dict()' format")
+            raise TypeException("Please make sure the data is in 'dict()' format")
 
         # Check if the database name exists
         if not (database_name in list(self.db.keys())):
-            raise database_exception("the selected database doesn't exist in the particular scope")
+            raise DatabaseException("the selected database doesn't exist in the particular scope")
 
         # Try to insert the data into the database
         try:
@@ -116,11 +115,11 @@ class Connection:
 
         # Check if the type of the search_query is dict()
         if not (type(dict()) == type(search_query)):
-            raise type_exception("Please make sure the search_query is in 'dict()' format")
+            raise TypeException("Please make sure the search_query is in 'dict()' format")
 
         # Check if the database name exists
         if not (database_name in list(self.db.keys())):
-            raise database_exception("the selected database doesn't exist in the particular scope")
+            raise DatabaseException("the selected database doesn't exist in the particular scope")
 
         # Check if the parameters are empty
         if not search_query:
@@ -128,10 +127,10 @@ class Connection:
             try:
                 return self.db[database_name][collection_name].find()
             except:
-                raise query_error("There was a query error, could not find any documents")
+                raise QueryError("There was a query error, could not find any documents")
         else:
             # Query a particular collection
             try:
-                return  self.db[database_name][collection_name].find(search_query)
+                return self.db[database_name][collection_name].find(search_query)
             except:
-                raise query_error("There was a query error, could not find any documents")
+                raise QueryError("There was a query error, could not find any documents")
