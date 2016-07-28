@@ -4,7 +4,7 @@ from pymongo import MongoClient
 # Type Exception
 #
 # Description: This exception handles a type error if the variable if the wrong type this
-#              this exception is called
+#              exception is called
 
 class TypeException(Exception):
     def __init__(self, value):
