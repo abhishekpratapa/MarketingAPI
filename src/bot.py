@@ -152,8 +152,8 @@ class Bot:
             self.siteAgent = LinkedIn(self.username, self.password, self.phone, self.server_db, self.driver, self.display)
         elif site.name == "Twitter":
             self.siteAgent = Twitter(self.username, self.password, self.phone, self.server_db, self.driver, self.display)
-
-        raise SiteError('Please select the correct site:  Types: [Google] [LinkedIn] [Twitter]')
+        else:
+            raise SiteError('Please select the correct site:  Types: [Google] [LinkedIn] [Twitter]')
 
 
     # method: search

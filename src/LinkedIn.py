@@ -18,7 +18,7 @@ class LoginError(Exception):
 
 
 # class:
-class Google:
+class LinkedIn:
     def __init__(self, username, password, phone, server_db, driver, display):
 
         #
