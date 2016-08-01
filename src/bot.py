@@ -175,11 +175,11 @@ class Bot:
             if addendums:
                 add_choice = " "+random.choice(addendums)
 
-            #full query term
+            # full query term
             query_term = str(key)+str(add_choice)
 
-            #search the key's
-            self.site.search(query_term)
+            # search the key's
+            self.siteAgent.search(query_term)
         pass
 
     def post(self):
@@ -187,3 +187,6 @@ class Bot:
 
     def message(self):
         pass
+
+    def close(self):
+        self.siteAgent.close()
