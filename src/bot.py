@@ -77,6 +77,7 @@ class Sites(Enum):
 #       search:     Search the relevant User Agent for information
 #       post:       Post public messages to the relevant social media websites
 #       message:    Send a private message to anyone within that network
+#       close:      Close the current web browser
 
 class Bot:
     def __init__(self, username, password, phone, site=Sites.LinkedIn, UserInterface=UserAgent.Firefox, display=False, database_url=None, databases_array=None):
@@ -164,7 +165,7 @@ class Bot:
     #
     # return:
 
-    def search(self, array_keywords, addendums=None, start_date="0/0/0", end_date="0/0/0", location=None):
+    def search(self, array_keywords, search_limit=100, addendums=None,start_date="0/0/0", end_date="0/0/0", location=None):
 
         # Select an append to the search query
         add_choice = ""
@@ -179,8 +180,10 @@ class Bot:
             query_term = str(key)+str(add_choice)
 
             # search the key's
-            self.siteAgent.search(query_term)
-        pass
+            self.siteAgent.search(query_term,search_limit,start_date,end_date,location)
+
+        #close the
+        return
 
     def post(self):
         pass
@@ -189,4 +192,12 @@ class Bot:
         pass
 
     def close(self):
+
+        # logout of agent
         self.siteAgent.close()
+
+        # close the browser
+        self.driver.close()
+
+        # close function
+        return
