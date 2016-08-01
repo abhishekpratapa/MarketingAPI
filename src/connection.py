@@ -68,6 +68,7 @@ class Connection:
         self.db = dict()
 
         #connect to all the DB's in the database_names
+
         for database in database_names:
             self.db[database] = self.client[database]
 
@@ -95,7 +96,7 @@ class Connection:
 
         # Try to insert the data into the database
         try:
-            self.db[database_name][collection_name].insertOne(data)
+            self.db[database_name][collection_name].insert_one(data)
             return True
         except:
             return False
@@ -111,10 +112,10 @@ class Connection:
     #
     # return: this method returns the database in the form of a dictionary list
 
-    def get_data(self, database_name, collection_name, search_query):
+    def get_data(self, database_name, collection_name, search_query=None):
 
         # Check if the type of the search_query is dict()
-        if not (type(dict()) == type(search_query)):
+        if (not (type(dict()) == type(search_query))) and (search_query) :
             raise TypeException("Please make sure the search_query is in 'dict()' format")
 
         # Check if the database name exists
