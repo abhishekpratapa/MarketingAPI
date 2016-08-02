@@ -47,7 +47,7 @@ class Google:
         self.display = display
 
         #
-        # Section 2:    Setup Secton
+        # Section 2:    Setup Section
         #
         # Description:  This section setups everything needed for the other functions
         #

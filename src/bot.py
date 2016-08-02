@@ -57,8 +57,9 @@ class UserAgent(Enum):
 #
 # Options:
 #
-#   Firefox
-#   Chrome
+#   LinkedIn
+#   Google
+#   Twitter
 #
 
 class Sites(Enum):
