@@ -185,11 +185,21 @@ class Bot:
         #close the
         return
 
-    def post(self):
-        pass
+    def post(self, message):
 
-    def message(self):
-        pass
+        # post a message hello
+        self.siteAgent.post(message)
+
+        # close function
+        return
+
+    def message(self, person_tag, subject, message):
+
+        # a call to the messaging method call
+        self.siteAgent.message(person_tag, subject, message)
+
+        # close function
+        return
 
     def close(self):
 

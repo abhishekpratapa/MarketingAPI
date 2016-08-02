@@ -96,6 +96,7 @@ class Twitter:
         pass
 
     def message(self):
+
         pass
 
     def close(self):

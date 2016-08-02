@@ -341,11 +341,122 @@ class Google:
         # return the array with the specified length
         return searchArray[:search_limit]
 
-    def post(self):
-        pass
+    def post(self, text):
+        # go to the google plus website
+        self.driver.get("https://plus.google.com/")
 
-    def message(self):
-        pass
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the button to the textbox
+        google_post = self.driver.find_elements_by_class_name("kqa")
+
+        for post in google_post:
+            if ("kqa es" in post.get_attribute("class")) and ("new with" in post.get_attribute("innerHTML")):
+                post.click()
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        #find the text box
+        text_box = self.driver.find_elements_by_class_name("df")
+
+        for button in text_box:
+            if "df b-K b-K-Xb URaP8 editable" in button.get_attribute("class"):
+                button.send_keys(text)
+                break
+
+        # find the submit button
+        send_buttons = self.driver.find_elements_by_class_name("d-k-l")
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # click the send button
+        for button in send_buttons:
+            if ("d-k-l b-c b-c-Ba qy jt" in button.get_attribute("class")) and ("Share" in button.get_attribute("innerHTML")):
+                button.click()
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # close function
+        return
+
+    def message(self, mail, subject, message):
+        # go to the homepage
+        self.driver.get("https://mail.google.com")
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the compose button
+        compose_buttons = self.driver.find_elements_by_class_name("T-I")
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # click the compose button
+        for button in compose_buttons:
+            if ("T-I J-J5-Ji T-I-KE L3" in button.get_attribute("class")) and ("COMPOSE" in button.get_attribute("innerHTML")):
+                button.click()
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the email
+        email_line = self.driver.find_elements_by_class_name("vO")
+
+        # type in the subject
+        for line in email_line:
+            if "to" in line.get_attribute("name"):
+                line.send_keys(mail)
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the subject line
+        subject_line = self.driver.find_elements_by_class_name("aoT")
+
+        # type in the subject
+        for line in subject_line:
+            if "subjectbox" in line.get_attribute("name"):
+                line.send_keys(subject)
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the message body
+        message_body = self.driver.find_elements_by_class_name("Am")
+
+        # type the message body
+        for body in message_body:
+            if ("Am Al editable LW-avf" in body.get_attribute("class")) and ("Message Body" in body.get_attribute("aria-label")):
+                body.send_keys(message)
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # find the send button
+        send_button = self.driver.find_elements_by_class_name("T-I")
+
+        # click the send button
+        for button in send_button:
+            if ("T-I J-J5-Ji aoO T-I-atl L3" in button.get_attribute("class")) and ("Send" in button.get_attribute("innerHTML")):
+                button.click()
+                break
+
+        # sleep for 3 seconds
+        time.sleep(3)
+
+        # close function
+        return
 
     def close(self):
         # go to the homepage
@@ -358,5 +469,5 @@ class Google:
         logout_button = self.driver.find_element_by_id("signout")
         logout_button.click()
 
-        #close function
+        # close function
         return
