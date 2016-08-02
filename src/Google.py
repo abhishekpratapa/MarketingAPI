@@ -109,7 +109,7 @@ class Google:
         except NoSuchElementException as e:
             raise LoginError("Could not Login to Google")
 
-    def search(self,query_term,search_limit,start_date,end_date, index_database=0):
+    def search(self, query_term, search_limit, start_date, end_date, index_database=0, collection_name=None, website=None):
 
         #
         # Section 1:    Search Bar
@@ -119,6 +119,10 @@ class Google:
 
         # search bar identification
         searchBar = self.driver.find_element_by_id("lst-ib")
+
+        # if there is a specific website, add it to the query
+        if website:
+            query_term = query_term + " site:" + website
 
         # clear the bars
         searchBar.clear()
@@ -326,7 +330,7 @@ class Google:
 
                     # if database put element into database
                     if self.database:
-                        self.database.insert(self.database_array[index_database], "stocks_article", insertable_data)
+                        self.database.insert(self.database_array[index_database], collection_name, insertable_data)
 
                 except:
 
