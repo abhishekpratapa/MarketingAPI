@@ -29,9 +29,19 @@ class SiteError(Exception):
     def __str__(self):
         return repr(self.value)
 
-# class:
+# class: Google
+#
+# Description: This is a class that allows to create a new Google Bot with functions
+#
+# Methods:
+#
+#       search:     Search the relevant User Agent for information
+#       post:       Post public messages to the relevant social media websites
+#       message:    Send a private message to anyone within that network
+#       close:      Close the current web browser
+
 class Google:
-    def __init__(self, username, password, phone, server_db, driver, display):
+    def __init__(self, username, password, phone, server_db, driver, display, database_array):
 
         #
         # Section 1:    Variables Secton
@@ -45,6 +55,7 @@ class Google:
         self.database = server_db
         self.driver = driver
         self.display = display
+        self.database_array = database_array
 
         #
         # Section 2:    Setup Section
@@ -98,7 +109,7 @@ class Google:
         except NoSuchElementException as e:
             raise LoginError("Could not Login to Google")
 
-    def search(self,query_term,search_limit,start_date,end_date,location):
+    def search(self,query_term,search_limit,start_date,end_date, index_database=0):
 
         #
         # Section 1:    Search Bar
@@ -112,7 +123,6 @@ class Google:
         # clear the bars
         searchBar.clear()
         searchBar.send_keys(query_term)
-        searchBar.send_keys(Keys.RETURN)
 
         # Sleep before sending info
         time.sleep(int(len(query_term) / 3))
@@ -272,7 +282,8 @@ class Google:
                     elements_with_r = self.driver.find_elements_by_xpath("//h3[contains(@class,'r')]/a")
 
                     # list the title
-                    print(elements_with_r[indexLoop].get_attribute("innerHTML"))
+                    title_data_point = elements_with_r[indexLoop].get_attribute("innerHTML")
+                    print(title_data_point)
 
                     # open the url in a new tab
                     elements_with_r[indexLoop].send_keys(Keys.COMMAND + Keys.RETURN)
@@ -288,6 +299,7 @@ class Google:
 
                     # put the url into the search array
                     searchArray.append(self.driver.current_url)
+                    url_data_point = self.driver.current_url
 
                     # switch to the current window to send commands to the new tab
                     self.driver.switch_to.window(main_window)
@@ -303,6 +315,19 @@ class Google:
 
                     # switch to the current window to send commands to main google search
                     self.driver.switch_to.window(main_window)
+
+                    # sleep for 2 seconds
+                    time.sleep(2)
+
+                    # create a data dictionary
+                    insertable_data = dict()
+                    insertable_data['title'] = title_data_point
+                    insertable_data['url'] = url_data_point
+
+                    # if database put element into database
+                    if self.database:
+                        self.database.insert(self.database_array[index_database], "stocks_article", insertable_data)
+
                 except:
 
                     # sleep from 4 to 7 seconds
@@ -339,7 +364,7 @@ class Google:
         time.sleep(4)
 
         # return the array with the specified length
-        return searchArray[:search_limit]
+        return searchArray
 
     def post(self, text):
         # go to the google plus website

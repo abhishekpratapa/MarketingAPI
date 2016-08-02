@@ -19,7 +19,7 @@ class LoginError(Exception):
 
 # class:
 class Twitter:
-    def __init__(self, username, password, phone, server_db, driver, display):
+    def __init__(self, username, password, phone, server_db, driver, display, database_array):
 
         #
         # Section 1:    Variables Secton
@@ -33,6 +33,7 @@ class Twitter:
         self.database = server_db
         self.driver = driver
         self.display = display
+        self.database_array = database_array
 
         #
         # Section 2:    Setup Secton

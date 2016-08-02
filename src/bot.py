@@ -126,7 +126,7 @@ class Bot:
         self.username = username
         self.password = password
         self.phone = phone
-
+        self.database_array = databases_array
         #
         # Section 4:    Database Setup
         #
@@ -149,24 +149,24 @@ class Bot:
 
         # Get the correct object for the sites
         if site.name == "Google":
-            self.siteAgent = Google(self.username, self.password, self.phone, self.server_db, self.driver, self.display)
+            self.siteAgent = Google(self.username, self.password, self.phone, self.server_db, self.driver, self.display, self.database_array)
         elif site.name == "LinkedIn":
-            self.siteAgent = LinkedIn(self.username, self.password, self.phone, self.server_db, self.driver, self.display)
+            self.siteAgent = LinkedIn(self.username, self.password, self.phone, self.server_db, self.driver, self.display, self.database_array)
         elif site.name == "Twitter":
-            self.siteAgent = Twitter(self.username, self.password, self.phone, self.server_db, self.driver, self.display)
+            self.siteAgent = Twitter(self.username, self.password, self.phone, self.server_db, self.driver, self.display, self.database_array)
         else:
             raise SiteError('Please select the correct site:  Types: [Google] [LinkedIn] [Twitter]')
 
 
     # method: search
     #
-    # Description:
+    # Description: This method goes through
     #
     # parameter
     #
     # return:
 
-    def search(self, array_keywords, search_limit=100, addendums=None,start_date="0/0/0", end_date="0/0/0", location=None):
+    def search(self, array_keywords, search_limit=100, addendums=None,start_date="0/0/0", end_date="0/0/0", index_database=0):
 
         # Select an append to the search query
         add_choice = ""
@@ -181,7 +181,7 @@ class Bot:
             query_term = str(key)+str(add_choice)
 
             # search the key's
-            self.siteAgent.search(query_term,search_limit,start_date,end_date,location)
+            self.siteAgent.search(query_term,search_limit,start_date,end_date,index_database)
 
         #close the
         return
