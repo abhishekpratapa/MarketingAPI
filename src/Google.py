@@ -327,6 +327,7 @@ class Google:
                     insertable_data = dict()
                     insertable_data['title'] = title_data_point
                     insertable_data['url'] = url_data_point
+                    insertable_data['search'] = query_term
 
                     # if database put element into database
                     if self.database:

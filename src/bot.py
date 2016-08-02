@@ -103,7 +103,9 @@ class Bot:
         # Description:  Check whether its a headless browser and if so create a virtual display
         #
 
-        #check whether the display is on or off
+        self.display = None
+
+        # check whether the display is on or off
         if not display:
             self.display = Display(visible=False, size=(1980, 1024))
             self.display.start()
