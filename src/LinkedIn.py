@@ -6,6 +6,9 @@ import time
 import random
 from bs4 import BeautifulSoup
 
+#
+#  CLEAN UP THIS CODE MOFO'S
+#
 
 # Login Error
 #
@@ -76,8 +79,6 @@ class LinkedIn:
         except NoSuchElementException as e:
             raise LoginError("Could not Login to Linkedin")
 
-        # login worked
-        return True
 
     def __get_profile_information(self, url_sent, Term):
 
@@ -230,6 +231,18 @@ class LinkedIn:
         return
 
     def search(self, Term, Limit, Database_save=True, Recursive=True, Recursion=3):
+        searchBar = self.driver.find_element_by_id('main-search-box')
+
+        # clear the bars
+        searchBar.clear()
+        searchBar.send_keys(Term)
+
+        # Sleep before sending info
+        time.sleep(int(len(Term) / 3))
+
+        # Press enter
+        searchBar.send_keys(Keys.RETURN)
+
         time.sleep(3)
         set_urls = []
 

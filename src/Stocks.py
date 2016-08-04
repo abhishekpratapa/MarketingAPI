@@ -503,6 +503,7 @@ class Stocks:
             instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
                                    bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Google_Data_Base"])
             returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "companies")
+            instance.close()
             #search for emails
             for urls in returned_URLs:
                 t = Thread(target=self.email_crawler, args=(urls, element["name"],))
@@ -511,9 +512,26 @@ class Stocks:
         return
 
     def scrape_linkedin(self):
+        for element in self.current_prospects:
+            instance = bot.Bot("abhishekpratapa@gmail.com", "AlinaSchroeder#123", "5129831767", bot.Sites.LinkedIn,
+                               bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["LinkedIn_Data_Base"])
+            instance.siteAgent.search(element["name"], 20, True, True, 3)
+            instance.close()
+        return
 
-        pass
     def learn_articles(self):
+        for element in self.current_prospects:
+            # search for urls
+            instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
+                               bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Article_Data_Base"])
+            returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "article", "cnn.com")
+            instance.close()
+
+            instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
+                              bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Article_Data_Base"])
+            returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "article", "cnn.com")
+            instance.close()
+
         pass
     def trade_stocks(self):
         pass
