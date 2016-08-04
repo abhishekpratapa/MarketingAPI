@@ -172,6 +172,7 @@ class Bot:
 
         # Select an append to the search query
         add_choice = ""
+        total_choice = []
 
         # Loop through the keywords to search
         for key in array_keywords:
@@ -183,10 +184,10 @@ class Bot:
             query_term = str(key)+str(add_choice)
 
             # search the key's
-            self.siteAgent.search(query_term,search_limit,start_date,end_date,index_database,collection_name,website)
+            total_choice = total_choice + self.siteAgent.search(query_term,search_limit,start_date,end_date,index_database,collection_name,website)
 
         #close the
-        return
+        return total_choice
 
     def post(self, message):
 
