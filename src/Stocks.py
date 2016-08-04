@@ -507,7 +507,8 @@ class Stocks:
             for urls in returned_URLs:
                 t = Thread(target=self.email_crawler, args=(urls, element["name"],))
                 t.start()
-        pass
+
+        return
 
     def scrape_linkedin(self):
 
