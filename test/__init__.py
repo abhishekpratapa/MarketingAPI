@@ -14,8 +14,8 @@ def get_store_articles_in_database(searchEvent):
     client = MongoClient("mongodb://localhost:27017")
     db = client.cnn_scrape
 
-    display = Display(visible=False, size=(1980, 1024))
-    display.start()
+    #display = Display(visible=False, size=(1980, 1024))
+    #display.start()
 
     driver = webdriver.Chrome()
     driver.get("http://money.cnn.com/")
@@ -34,11 +34,11 @@ def get_store_articles_in_database(searchEvent):
         total_value = article_Numbers.get_attribute("innerHTML")
 
         integer_limit = int(total_value.replace('(', '').replace(')', ''))
-
+        print(integer_limit)
         link_to_click.click()
     except:
         driver.close()
-        display.stop()
+        #display.stop()
         return "False"
     index = 0
     previous_integer=-1
@@ -46,17 +46,17 @@ def get_store_articles_in_database(searchEvent):
 
     while index < integer_limit:
         number_of_elements = driver.find_elements_by_class_name("summaryBlock")
-
+	
         if index == previous_integer:
-            driver.close()
-            display.stop()
-            return "False"
+            break
         else:
             previous_integer = index
 
+        time.sleep(10)
+        number_of_elements = driver.find_elements_by_class_name("summaryBlock")	
+
         for ele in number_of_elements:
             index += 1
-
             try:
                 headline = ele.find_element_by_class_name("cnnHeadline")
                 tagged = headline.find_element_by_tag_name("a")
@@ -95,23 +95,12 @@ def get_store_articles_in_database(searchEvent):
                 except:
                     pass
 
-        if not next_button_pressed:
-            driver.close()
-            display.stop()
-            return "False"
+        print(next_button_pressed)
 
         time.sleep(5)
     driver.close()
-    display.stop()
+    #display.stop()
     return "True"
-
-# function to be mapped over
-def calculateParallel(snp, threads=2):
-    pool = ThreadPool(threads)
-    results = pool.map(get_store_articles_in_database, snp)
-    pool.close()
-    pool.join()
-    return results
 
 sp500 = finsymbols.get_sp500_symbols()
 
@@ -119,13 +108,13 @@ tickerArray = []
 
 for ticker in sp500:
     value = ticker["company"]
-    tickerArray.append(value)
-
-returned_value = calculateParallel(tickerArray, 8)
-
-f = open('work.txt', 'w+')
-
-for val in returned_value:
-    f.write(val+",")
-f.close()
+    print("________________________________________________")
+    print("________________________________________________")
+    print("________________________________________________")
+    print("________________________________________________")
+    get_store_articles_in_database(value)
+    print("________________________________________________")
+    print("________________________________________________")
+    print("________________________________________________")
+    print("________________________________________________")
 # get_store_articles_in_database("GOOGL")
