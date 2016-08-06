@@ -41,11 +41,18 @@ def get_store_articles_in_database(searchEvent):
         display.stop()
         return "False"
     index = 0
-
+    previous_integer=-1
     time.sleep(3)
 
     while index < integer_limit:
         number_of_elements = driver.find_elements_by_class_name("summaryBlock")
+
+        if index == previous_integer:
+            driver.close()
+            display.stop()
+            return "False"
+        else:
+            previous_integer = index
 
         for ele in number_of_elements:
             index += 1
@@ -77,13 +84,21 @@ def get_store_articles_in_database(searchEvent):
 
         next_button = driver.find_elements_by_class_name("next")
 
+        next_button_pressed = False
+
         for element in next_button:
             if "ends next" in element.get_attribute("class"):
                 try:
                     element.click()
+                    next_button_pressed = True
                     break
                 except:
                     pass
+
+        if not next_button_pressed:
+            driver.close()
+            display.stop()
+            return "False"
 
         time.sleep(5)
     driver.close()
@@ -106,7 +121,7 @@ for ticker in sp500:
     value = ticker["company"]
     tickerArray.append(value)
 
-returned_value = calculateParallel(tickerArray, 4)
+returned_value = calculateParallel(tickerArray, 8)
 
 f = open('work.txt', 'w+')
 
