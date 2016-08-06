@@ -52,7 +52,7 @@ def get_store_articles_in_database(searchEvent):
             previous_integer = index
 
         time.sleep(10)
-        
+
         article_container = driver.find_element_by_id("summaryList_articles")
         number_of_elements = article_container.find_elements_by_class_name("summaryBlock")
 
