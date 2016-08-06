@@ -93,9 +93,12 @@ def calculateParallel(snp, threads=2):
 
 sp500 = finsymbols.get_sp500_symbols()
 
-for ticker in sp500:
-    ticker["symbol"]
+tickerArray = []
 
-returned_value = calculateParallel(sp500, 4)
+for ticker in sp500:
+    value = ticker["company"]
+    tickerArray.append(value)
+
+returned_value = calculateParallel(tickerArray, 1)
 
 # get_store_articles_in_database("GOOGL")
