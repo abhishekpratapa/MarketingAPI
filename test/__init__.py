@@ -45,15 +45,16 @@ def get_store_articles_in_database(searchEvent):
     time.sleep(3)
 
     while index < integer_limit:
-        number_of_elements = driver.find_elements_by_class_name("summaryBlock")
-	
+
         if index == previous_integer:
             break
         else:
             previous_integer = index
 
         time.sleep(10)
-        number_of_elements = driver.find_elements_by_class_name("summaryBlock")	
+        
+        article_container = driver.find_element_by_id("summaryList_articles")
+        number_of_elements = article_container.find_elements_by_class_name("summaryBlock")
 
         for ele in number_of_elements:
             index += 1
