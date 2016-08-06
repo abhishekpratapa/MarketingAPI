@@ -109,7 +109,7 @@ class Google:
         except NoSuchElementException as e:
             raise LoginError("Could not Login to Google")
 
-    def search(self, query_term, search_limit, start_date, end_date, index_database=0, collection_name=None, website=None):
+    def search(self, query_term, search_limit, start_date, end_date, index_database=0, collection_name=None, website=None, recurrent=1):
 
         #
         # Section 1:    Search Bar
@@ -142,21 +142,29 @@ class Google:
 
         # this scenario is if both the start dates and the end dates were given
         if not (start_date == "0/0/0" and end_date == "0/0/0"):
+            #sleep for 10 seconds
+            time.sleep(10)
 
-            # click on the more button
-            more_button = self.driver.find_element_by_id("hdtb-tls")
-            more_button.click()
+            if recurrent == 1:
+                # click on the more button
+                more_button = self.driver.find_element_by_id("hdtb-tls")
+                more_button.click()
 
             # sleep for 3 seconds
             time.sleep(3)
 
             # select an option to chose date range
             range_selector = self.driver.find_elements_by_class_name("mn-hd-txt")
-
-            for select in range_selector:
-                if ("Any time" in select.get_attribute("innerHTML")):
-                    select.click()
-                    break
+            if recurrent == 1:
+                for select in range_selector:
+                    if ("Any time" in select.get_attribute("innerHTML")):
+                        select.click()
+                        break
+            else:
+                for select in range_selector:
+                    if (str(start_date.split("/")[2]) in select.get_attribute("innerHTML")):
+                        select.click()
+                        break
 
             # sleep for 3 seconds
             time.sleep(3)
@@ -170,6 +178,7 @@ class Google:
 
             # find the start date selection
             cdr_min = self.driver.find_element_by_id("cdr_min")
+            cdr_min.clear()
             cdr_min.send_keys(start_date)
 
             # sleep for 3 seconds
@@ -177,6 +186,7 @@ class Google:
 
             # find the end date selection
             cdr_max = self.driver.find_element_by_id("cdr_max")
+            cdr_max.clear()
             cdr_max.send_keys(end_date)
 
             # submit the date
@@ -195,6 +205,8 @@ class Google:
 
         # this section is if only a start date is provides and it adds one month to capture the end date
         elif not (start_date == "0/0/0"):
+            # sleep for 10 seconds
+            time.sleep(10)
 
             # click on the more button
             more_button = self.driver.find_element_by_id("hdtb-tls")
@@ -264,7 +276,7 @@ class Google:
 
 
         # check if we have reached the limit for search terms
-        while search_limit > len(searchArray):
+        while (search_limit > len(searchArray)):
 
             # sleep for 5 seconds
             time.sleep(5)
@@ -274,16 +286,21 @@ class Google:
 
             # check how many elements are on that page
             looper = len(new_elements) - 1
-            indexLoop = 0;
+            indexLoop = 0
+
+            if len(new_elements) == 0:
+                break
 
             # loop through all search terms on the page
-            while looper > indexLoop:
+            while looper >= indexLoop:
 
                 # try to get the url of the link
                 try:
 
                     # find the link in the elements
                     elements_with_r = self.driver.find_elements_by_xpath("//h3[contains(@class,'r')]/a")
+
+                    print(indexLoop)
 
                     # list the title
                     title_data_point = elements_with_r[indexLoop].get_attribute("innerHTML")
@@ -358,12 +375,18 @@ class Google:
 
             # click the next button to go to the next page
             backbutton = self.driver.find_elements_by_class_name('pn')
-            backbutton[len(backbutton) - 1].click()
+            if backbutton:
+                backbutton[len(backbutton) - 1].click()
+            else:
+                break
 
             # sleep for 3 seconds
             time.sleep(3)
 
         # end of the loop
+
+        # sleep for 4 seconds
+        time.sleep(4)
 
         # sleep for 4 seconds
         time.sleep(4)

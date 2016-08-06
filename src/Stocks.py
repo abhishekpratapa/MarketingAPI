@@ -11,6 +11,13 @@ import requests
 from collections import deque
 from pymongo import MongoClient
 from threading import Thread
+from datetime import timedelta, date
+
+
+#def for dates
+def daterange(start_date, end_date):
+    for n in range(int ((end_date - start_date).days)):
+        yield start_date + timedelta(n)
 
 # Method: stocks_dictionary
 #
@@ -178,7 +185,7 @@ class Stocks:
         # the current window is set to the main window
         self.current_window = 0
 
-        self.client = MongoClient("mongodb://127.0.0.1:27017");
+        self.client = MongoClient("mongodb://127.0.0.1:27017")
         self.db = self.client.Stock_Agent
 
         # fill this with potential array hits
@@ -520,19 +527,50 @@ class Stocks:
         return
 
     def learn_articles(self):
-        for element in self.current_prospects:
-            # search for urls
-            instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
-                               bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Article_Data_Base"])
-            returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "article", "cnn.com")
-            instance.close()
+        start_date = date(2009, 1, 2)
+        end_date = date(2016, 6, 2)
+        previous_data = "01/01/2009"
 
-            instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
-                              bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Article_Data_Base"])
-            returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "article", "cnn.com")
-            instance.close()
+        instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
+                           bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Article_Data_Base"])
+        recurrent = 1
+        nextOne = 0
+        for single_date in daterange(start_date, end_date):
+            if nextOne % 2 == 0:
+                previous_data = str(single_date.strftime("%m/%d/%Y"))
+                print(nextOne)
+                nextOne += 1
+                continue
+            nextOne += 1
+            for element in self.current_prospects:
+                # search for urls
+                returned_URLs = instance.search([element["name"]], 10, [], previous_data, str(single_date.strftime("%m/%d/%Y")), 0, "article", "cnn.com", recurrent)
 
-        pass
+                recurrent += 1
+
+                for url in returned_URLs:
+                    incept = dict()
+                    incept['name'] = element["name"]
+                    incept['ticker'] = element["ticker"]
+                    incept['url'] = url
+                    incept['start_date'] = str(start_date.strftime("%m/%d/%Y"))
+                    incept['end_date'] = str(end_date.strftime("%m/%d/%Y"))
+                    self.db.stock_urls.insert_one(incept)
+
+                returned_urls_2 = instance.search([element["ticker"]], 10, [], previous_data, str(single_date.strftime("%m/%d/%Y")), 0, "article", "cnn.com",recurrent)
+                previous_data = str(single_date.strftime("%m/%d/%Y"))
+
+                for url in returned_urls_2:
+                    incept = dict()
+                    incept['name'] = element["name"]
+                    incept['ticker'] = element["ticker"]
+                    incept['url'] = url
+                    incept['start_date'] = str(start_date.strftime("%m/%d/%Y"))
+                    incept['end_date'] = str(end_date.strftime("%m/%d/%Y"))
+                    self.db.stock_urls.insert_one(incept)
+
+        instance.close()
+        return
     def trade_stocks(self):
         pass
     def display_apporiate_data(self, choice, page):
@@ -547,23 +585,35 @@ class Stocks:
 
             # options function
             options[choice](page)
-
+            return choice
         elif (page == 11):
             options = {
                 2: self.scrape_google,
                 3: self.scrape_linkedin
             }
-            pass
+
+            t = Thread(target=options[choice], args=())
+            t.start()
+
+            return choice
         elif (page == 12):
             options = {
                 2: self.learn_articles
             }
-            pass
+
+            t = Thread(target=options[choice], args=())
+            t.start()
+
+            return choice
         elif (page == 13):
             options = {
                 2: self.trade_stocks
             }
-            pass
+
+            t = Thread(target=options[choice], args=())
+            t.start()
+
+            return choice
         # return form function
         return choice
 

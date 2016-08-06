@@ -168,7 +168,7 @@ class Bot:
     #
     # return:
 
-    def search(self, array_keywords, search_limit=100, addendums=None,start_date="0/0/0", end_date="0/0/0", index_database=0, collection_name=None,website=None):
+    def search(self, array_keywords, search_limit=100, addendums=None,start_date="0/0/0", end_date="0/0/0", index_database=0, collection_name=None,website=None, recurrent=1):
 
         # Select an append to the search query
         add_choice = ""
@@ -184,7 +184,7 @@ class Bot:
             query_term = str(key)+str(add_choice)
 
             # search the key's
-            total_choice = total_choice + self.siteAgent.search(query_term,search_limit,start_date,end_date,index_database,collection_name,website)
+            total_choice = total_choice + self.siteAgent.search(query_term,search_limit,start_date,end_date,index_database,collection_name,website,recurrent)
 
         #close the
         return total_choice
