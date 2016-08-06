@@ -39,7 +39,7 @@ def get_store_articles_in_database(searchEvent):
     except:
         driver.close()
         display.stop()
-        return False
+        return "False"
     index = 0
 
     time.sleep(3)
@@ -88,7 +88,7 @@ def get_store_articles_in_database(searchEvent):
         time.sleep(5)
     driver.close()
     display.stop()
-    return True
+    return "True"
 
 # function to be mapped over
 def calculateParallel(snp, threads=2):
@@ -108,4 +108,9 @@ for ticker in sp500:
 
 returned_value = calculateParallel(tickerArray, 4)
 
+f = open('work.txt', 'w+')
+
+for val in returned_value:
+    f.write(val+",")
+f.close()
 # get_store_articles_in_database("GOOGL")
