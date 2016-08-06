@@ -10,6 +10,7 @@ from pyvirtualdisplay import Display
 
 def get_store_articles_in_database(searchEvent):
     searchEvent = str(searchEvent)
+    print(searchEvent)
     client = MongoClient("mongodb://localhost:27017")
     db = client.cnn_scrape
 
@@ -27,14 +28,18 @@ def get_store_articles_in_database(searchEvent):
 
     time.sleep(3)
 
-    link_to_click = driver.find_element_by_id("moneyTotalArticles")
-    article_Numbers= link_to_click.find_element_by_tag_name("em")
-    total_value = article_Numbers.get_attribute("innerHTML")
+    try:
+        link_to_click = driver.find_element_by_id("moneyTotalArticles")
+        article_Numbers= link_to_click.find_element_by_tag_name("em")
+        total_value = article_Numbers.get_attribute("innerHTML")
 
-    integer_limit = int(total_value.replace('(', '').replace(')', ''))
+        integer_limit = int(total_value.replace('(', '').replace(')', ''))
 
-    link_to_click.click()
-
+        link_to_click.click()
+    except:
+        driver.close()
+        display.stop()
+        return False
     index = 0
 
     time.sleep(3)
@@ -81,7 +86,7 @@ def get_store_articles_in_database(searchEvent):
                     pass
 
         time.sleep(5)
-
+    driver.close()
     display.stop()
     return True
 
