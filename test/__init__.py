@@ -9,6 +9,7 @@ from multiprocessing.dummy import Pool as ThreadPool
 from pyvirtualdisplay import Display
 
 def get_store_articles_in_database(searchEvent):
+    searchEvent = str(searchEvent)
     client = MongoClient("mongodb://localhost:27017")
     db = client.cnn_scrape
 
@@ -42,27 +43,30 @@ def get_store_articles_in_database(searchEvent):
         number_of_elements = driver.find_elements_by_class_name("summaryBlock")
 
         for ele in number_of_elements:
-            headline = ele.find_element_by_class_name("cnnHeadline")
-            tagged = headline.find_element_by_tag_name("a")
-            link = tagged.get_attribute("href")
-            print(link)
+            try:
+                headline = ele.find_element_by_class_name("cnnHeadline")
+                tagged = headline.find_element_by_tag_name("a")
+                link = tagged.get_attribute("href")
+                print(link)
 
-            attribute_searched = ele.find_element_by_class_name("cnnBlurbTxt")
-            text_summary = attribute_searched.get_attribute("innerHTML")
-            text_summary = re.sub('<[^<]+?>', '', text_summary)
-            print(text_summary)
+                attribute_searched = ele.find_element_by_class_name("cnnBlurbTxt")
+                text_summary = attribute_searched.get_attribute("innerHTML")
+                text_summary = re.sub('<[^<]+?>', '', text_summary)
+                print(text_summary)
 
-            the_date = ele.find_element_by_class_name("cnnDateStamp")
-            date_returned = the_date.get_attribute("innerHTML")
-            print(date_returned)
+                the_date = ele.find_element_by_class_name("cnnDateStamp")
+                date_returned = the_date.get_attribute("innerHTML")
+                print(date_returned)
 
-            init_data = dict()
-            init_data["url"] = link
-            init_data["ticker"] = searchEvent
-            init_data["summary"] = text_summary
-            init_data["date"] = date_returned
+                init_data = dict()
+                init_data["url"] = link
+                init_data["ticker"] = searchEvent
+                init_data["summary"] = text_summary
+                init_data["date"] = date_returned
 
-            db.raw_articles.insert_one(init_data)
+                db.raw_articles.insert_one(init_data)
+            except:
+                pass
 
         next_button = driver.find_elements_by_class_name("next")
 
@@ -88,6 +92,9 @@ def calculateParallel(snp, threads=2):
     return results
 
 sp500 = finsymbols.get_sp500_symbols()
+
+for ticker in sp500:
+    ticker["symbol"]
 
 returned_value = calculateParallel(sp500, 4)
 
