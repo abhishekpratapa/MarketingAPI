@@ -508,7 +508,7 @@ class Stocks:
         for element in self.current_prospects:
             # search for urls
             instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
-                                   bot.UserAgent.Firefox, False, "mongodb://localhost:27017", ["Google_Data_Base"])
+                                   bot.UserAgent.Chrome, False, "mongodb://localhost:27017", ["Google_Data_Base"])
             returned_URLs = instance.search([element["name"]], 10, [], "0/0/0", "0/0/0", 0, "companies")
             instance.close()
             #search for emails
@@ -521,7 +521,7 @@ class Stocks:
     def scrape_linkedin(self):
         for element in self.current_prospects:
             instance = bot.Bot("abhishekpratapa@gmail.com", "AlinaSchroeder#123", "5129831767", bot.Sites.LinkedIn,
-                               bot.UserAgent.Firefox, False, "mongodb://localhost:27017", ["LinkedIn_Data_Base"])
+                               bot.UserAgent.Chrome, False, "mongodb://localhost:27017", ["LinkedIn_Data_Base"])
             instance.siteAgent.search(element["name"], 20, True, True, 3)
             instance.close()
         return
@@ -532,7 +532,7 @@ class Stocks:
         previous_data = "01/01/2009"
 
         instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google,
-                           bot.UserAgent.Firefox, False, "mongodb://localhost:27017", ["Article_Data_Base"])
+                           bot.UserAgent.Chrome, False, "mongodb://localhost:27017", ["Article_Data_Base"])
         recurrent = 1
         nextOne = 0
         for single_date in daterange(start_date, end_date):
