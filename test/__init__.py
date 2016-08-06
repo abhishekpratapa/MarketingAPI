@@ -43,6 +43,8 @@ def get_store_articles_in_database(searchEvent):
         number_of_elements = driver.find_elements_by_class_name("summaryBlock")
 
         for ele in number_of_elements:
+            index += 1
+
             try:
                 headline = ele.find_element_by_class_name("cnnHeadline")
                 tagged = headline.find_element_by_tag_name("a")
@@ -60,7 +62,7 @@ def get_store_articles_in_database(searchEvent):
 
                 init_data = dict()
                 init_data["url"] = link
-                init_data["ticker"] = searchEvent
+                init_data["company"] = searchEvent
                 init_data["summary"] = text_summary
                 init_data["date"] = date_returned
 
@@ -99,6 +101,6 @@ for ticker in sp500:
     value = ticker["company"]
     tickerArray.append(value)
 
-returned_value = calculateParallel(tickerArray, 1)
+returned_value = calculateParallel(tickerArray, 4)
 
 # get_store_articles_in_database("GOOGL")
