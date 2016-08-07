@@ -66,12 +66,14 @@ def get_get_response(searchTerm):
 
         max_results = object_returnable["criteria"][0]["maxResults"]
 
-        count = 0
-
         for obj in object_returnable["results"][0]:
-            db.raw_articles.insert_one(obj)
-            print(obj)
-            count = count + 1
+            init = dict()
+            init["search"] = searchTerm
+            init["more_data"] = obj
+
+            db.raw_articles.insert_one(init)
+
+            print(init)
 
         index = 1 + max_results
 

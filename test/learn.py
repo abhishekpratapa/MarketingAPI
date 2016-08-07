@@ -8,11 +8,13 @@ import finsymbols
 client = MongoClient("mongodb://localhost:27017")
 db = client.cnn_scrape
 
-elements = db.raw_articles.find()
+
+
 sid = SentimentIntensityAnalyzer()
 sp500 = finsymbols.get_sp500_symbols()
 
 for ele in sp500:
+    elements = db.raw_articles.find()
     for ele in elements:
         initiation = dict()
         print(ele["url"])
