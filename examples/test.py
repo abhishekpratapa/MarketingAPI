@@ -1,6 +1,6 @@
 import bot
 
-instance = bot.Bot("abhishekpratapa@utexas.edu", "BedruSe7", "5129831767", bot.Sites.Google, bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Google_Data_Base"])
+instance = bot.Bot("email", "password", "phone", bot.Sites.Google, bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["Google_Data_Base"])
 
 # test post
 #instance.post("hello")
