@@ -2,7 +2,7 @@ import bot
 
 # The main file that does everything
 def main():
-    instance = bot.Bot("abhishekpratapa@gmail.com", "AlinaSchroeder#123", "5129831767", bot.Sites.LinkedIn,
+    instance = bot.Bot("email", "password", "phone", bot.Sites.LinkedIn,
                        bot.UserAgent.Firefox, True, "mongodb://localhost:27017", ["LinkedIn_Data_Base"])
 
 
